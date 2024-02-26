@@ -7,14 +7,14 @@ const port = process.env.PORT;
 
 const FRONTEND = process.env.FRONTEND;
 const corsOptions = {
-	origin: FRONTEND,
-	optionSuccessStatus: 200,
+	origin: true,
+	// optionSuccessStatus: 200,
 };
 Paystack API key (replace with your actual Paystack API key)
 const paystackSecretKey = process.env.PAYSTAC_KEY;
 const bodyParser = require("body-parser");
 
-app.use(bodyParser.json());
+
 
 app.use(cors());
 
