@@ -14,13 +14,15 @@ const corsOptions = {
 const paystackSecretKey = process.env.PAYSTAC_KEY;
 
 
+app.use(express.json()); // Middleware for parsing JSON
 
 
 app.use(cors());
 
 app.post("/api/initiate-payment", async (req, res) => {
 	try {
-		const { amount, email, metadata } = req.body;
+		const { amount, email, metadata } = req.body || {};
+
 
 		// Paystack API endpoint for initializing a transaction
 		const paystackInitiateUrl =
