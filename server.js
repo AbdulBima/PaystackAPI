@@ -6,17 +6,17 @@ const app = express();
 const port = process.env.PORT;
 
 const FRONTEND = process.env.FRONTEND;
-// const corsOptions = {
-// 	origin: FRONTEND,
-// 	optionSuccessStatus: 200,
-// };
-// Paystack API key (replace with your actual Paystack API key)
+const corsOptions = {
+	origin: FRONTEND,
+	optionSuccessStatus: 200,
+};
+Paystack API key (replace with your actual Paystack API key)
 const paystackSecretKey = process.env.PAYSTAC_KEY;
 const bodyParser = require("body-parser");
 
 app.use(bodyParser.json());
 
-// app.use(cors());
+app.use(cors());
 
 app.post("/api/initiate-payment", async (req, res) => {
 	try {
