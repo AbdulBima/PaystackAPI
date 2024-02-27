@@ -66,21 +66,37 @@ app.post("/paystack-webhook", async (req, res) => {
 
     // Extract necessary data from Paystack webhook event
     const webhookResponse = req.body;
-		// const {  email } = req.body.customer.email;
-		console.log(webhookResponse);
+    console.log(webhookResponse);
 
-		// if (!email) {
-    //   console.error("Email is missing in Paystack webhook payload.");
-    //   return res.status(400).json({ status: "error", message: "Email is required." });
-    // }
-		const customerEmail = webhookResponse.data.customer.email;
-		const amount = webhookResponse.data.amount;
+    // Extract metadata from webhook response
+    const metadata = webhookResponse.data.metadata;
+
+    if (!metadata || !metadata.custom_fields) {
+      console.error("Metadata or custom_fields is missing in Paystack webhook payload.");
+      return res.status(400).json({ status: "error", message: "Invalid Paystack webhook payload." });
+    }
+
+    // Find the custom field with variable_name "cart_products"
+    const cartProductsField = metadata.custom_fields.find(field => field.variable_name === "cart_products");
+
+    if (!cartProductsField) {
+      console.error("Cart products field is missing in Paystack webhook payload.");
+      return res.status(400).json({ status: "error", message: "Cart products field is required." });
+    }
+
+    // Parse the cart_products value (assuming it was stringified JSON)
+    const cartProducts = JSON.parse(cartProductsField.value);
+
+    // Extract other necessary data from Paystack webhook event
+    const customerEmail = webhookResponse.data.customer.email;
+    const amount = webhookResponse.data.amount;
+
     // Make a post request to the order endpoint
     const orderResponse = await axios.post(
-      "https://backendv2-smz4.onrender.com/api/order/", 
+      "https://backendv2-smz4.onrender.com/api/order/",
       {
         orderer: customerEmail,
-        order: [amount.toString()], // Assuming amount is a number, convert it to a string or adjust as needed
+        order: cartProducts,
       }
     );
 
@@ -94,6 +110,7 @@ app.post("/paystack-webhook", async (req, res) => {
     res.status(500).json({ status: "error" });
   }
 });
+
 
 
 app.listen(port, () => {
