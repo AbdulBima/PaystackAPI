@@ -98,7 +98,7 @@ app.post("/paystack-webhook", async (req, res) => {
       "https://backendv2-smz4.onrender.com/api/order/",
       {
         orderer: customerEmail,
-        order: cartProducts,
+        order: metadata,
       },
       {
         headers: {
