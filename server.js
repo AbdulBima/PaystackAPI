@@ -73,7 +73,8 @@ app.post("/paystack-webhook", async (req, res) => {
     //   console.error("Email is missing in Paystack webhook payload.");
     //   return res.status(400).json({ status: "error", message: "Email is required." });
     // }
-		customerEmail = webhookResponse.data.customer.email;
+		const customerEmail = webhookResponse.data.customer.email;
+		const amount = webhookResponse.data.amount;
     // Make a post request to the order endpoint
     const orderResponse = await axios.post(
       "https://backendv2-smz4.onrender.com/api/order/", 
