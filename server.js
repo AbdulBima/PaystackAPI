@@ -71,6 +71,8 @@ app.post("/paystack-webhook", async (req, res) => {
     // Extract metadata from webhook response
     const metadata = webhookResponse.data.metadata;
 
+		console.log(metadata);
+
     if (!metadata || !metadata.custom_fields) {
       console.error("Metadata or custom_fields is missing in Paystack webhook payload.");
       return res.status(400).json({ status: "error", message: "Invalid Paystack webhook payload." });
@@ -91,12 +93,17 @@ app.post("/paystack-webhook", async (req, res) => {
     const customerEmail = webhookResponse.data.customer.email;
     const amount = webhookResponse.data.amount;
 
-    // Make a post request to the order endpoint
+    // Make a post request to the order endpoint with the correct content type
     const orderResponse = await axios.post(
       "https://backendv2-smz4.onrender.com/api/order/",
       {
         orderer: customerEmail,
         order: cartProducts,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
       }
     );
 
@@ -110,6 +117,7 @@ app.post("/paystack-webhook", async (req, res) => {
     res.status(500).json({ status: "error" });
   }
 });
+
 
 
 
