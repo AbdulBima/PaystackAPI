@@ -66,6 +66,12 @@ app.post("/paystack-webhook", async (req, res) => {
 
     // Extract necessary data from Paystack webhook event
     const { email, amount } = req.body.data;
+		console.log(email, amount);
+
+		if (!email) {
+      console.error("Email is missing in Paystack webhook payload.");
+      return res.status(400).json({ status: "error", message: "Email is required." });
+    }
 
     // Make a post request to the order endpoint
     const orderResponse = await axios.post(
