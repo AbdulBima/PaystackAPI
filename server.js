@@ -62,7 +62,7 @@ app.post("/api/initiate-payment", async (req, res) => {
 // Paystack Webhook endpoint
 app.post("/paystack-webhook", async (req, res) => {
   try {
-    // Verify Paystack signature (implement this based on Paystack documentation)
+    // Verify Paystack signature 
 
     // Extract necessary data from Paystack webhook event
     const webhookResponse = req.body;
@@ -107,7 +107,7 @@ app.post("/paystack-webhook", async (req, res) => {
       }
     );
 
-    // Check the order response if needed
+    // Check the order 
     console.log("Order response:", orderResponse.data);
 
     // Acknowledge receipt of Paystack webhook event
