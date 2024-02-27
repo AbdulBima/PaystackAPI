@@ -65,7 +65,8 @@ app.post("/paystack-webhook", async (req, res) => {
     // Verify Paystack signature (implement this based on Paystack documentation)
 
     // Extract necessary data from Paystack webhook event
-    const { email, amount } = req.body.data;
+    const {  amount } = req.body.data;
+		const {  email } = req.body.customer.email;
 		console.log(email, amount);
 
 		if (!email) {
