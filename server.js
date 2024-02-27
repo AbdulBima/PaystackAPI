@@ -65,26 +65,26 @@ app.post("/paystack-webhook", async (req, res) => {
     // Verify Paystack signature (implement this based on Paystack documentation)
 
     // Extract necessary data from Paystack webhook event
-    const bodyData = req.body;
+    const webhookResponse = req.body;
 		// const {  email } = req.body.customer.email;
-		console.log(bodyData);
+		console.log(webhookResponse);
 
 		// if (!email) {
     //   console.error("Email is missing in Paystack webhook payload.");
     //   return res.status(400).json({ status: "error", message: "Email is required." });
     // }
-
+		customerEmail = webhookResponse.data.customer.email;
     // Make a post request to the order endpoint
-    // const orderResponse = await axios.post(
-    //   "https://backendv2-smz4.onrender.com/api/order", 
-    //   {
-    //     orderer: email,
-    //     order: [amount.toString()], // Assuming amount is a number, convert it to a string or adjust as needed
-    //   }
-    // );
+    const orderResponse = await axios.post(
+      "https://backendv2-smz4.onrender.com/api/order", 
+      {
+        orderer: customerEmail,
+        order: [amount.toString()], // Assuming amount is a number, convert it to a string or adjust as needed
+      }
+    );
 
-    // // Check the order response if needed
-    // console.log("Order response:", orderResponse.data);
+    // Check the order response if needed
+    console.log("Order response:", orderResponse.data);
 
     // Acknowledge receipt of Paystack webhook event
     res.json({ status: "success" });
