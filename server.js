@@ -80,6 +80,8 @@ app.post("/paystack-webhook", async (req, res) => {
 
     // Find the custom field with variable_name "cart_products"
     const cartProductsField = metadata.custom_fields.find(field => field.variable_name === "cart_products");
+    const userIdField = metadata.custom_fields.find(field => field.variable_name === "user._id");
+
 
     if (!cartProductsField) {
       console.error("Cart products field is missing in Paystack webhook payload.");
@@ -97,8 +99,10 @@ app.post("/paystack-webhook", async (req, res) => {
     const orderResponse = await axios.post(
       "https://backendv2-smz4.onrender.com/api/order/",
       {
-        orderer: customerEmail,
+        ordererId: userIdField,
+        ordererEmail: customerEmail,
         order: cartProducts,
+        orderAmount: amount,
       },
       {
         headers: {
